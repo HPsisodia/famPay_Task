@@ -2,6 +2,8 @@
 
 do "npm i" to install all the dependencies
 
+run "npm start" to run the server
+
 add your YOUTUBE API V3 KEY in the "apikey" variable in "playlist" and "video" function in controller.
 
 start up your local mongodb, as this project uses mongodb as its database
