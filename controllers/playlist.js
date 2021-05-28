@@ -20,13 +20,13 @@ exports.video = async(req,res) => {
         if(req.body){
             query = req.body.query
         }else{
-            query = "official";
+            query = "tea";
         }
 
         ////generating the before and after date to be used in youtube API
         //// The api looks for video uploaded within the time frame of now and 2 min earlier
         var date = Date.now()
-        var dateAfter = date - 120000;
+        var dateAfter = date - 600000;
         
         var dateBefore = new Date(date);
         dateBefore = dateBefore.toJSON()
