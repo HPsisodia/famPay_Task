@@ -20,7 +20,7 @@ exports.video = async(req,res) => {
         if(req.body){
             query = req.body.query
         }else{
-            query = "tea";
+            query = "official";
         }
 
         ////generating the before and after date to be used in youtube API
