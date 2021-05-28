@@ -23,6 +23,8 @@ exports.video = async(req,res) => {
             query = "tea";
         }
 
+        ////generating the before and after date to be used in youtube API
+        //// The api looks for video uploaded within the time frame of now and 2 min earlier
         var date = Date.now()
         var dateAfter = date - 120000;
         
@@ -38,12 +40,10 @@ exports.video = async(req,res) => {
 
         var videoDetails;
         
-        // videoDetails = await axios({
-        //     method: "get",
-        //     url:
-        //         `https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&order=date&publishedAfter=${dateAfter}&publishedBefore=${dateBefore}&q=${query}&type=video&key=${apikey}`
-        // });
 
+
+        ///If query is undefined or empty, it returns all the videos uploaded
+        //Else if some query is present, it searches based on that 
 
         if(query == undefined || query == ""){
             
@@ -66,17 +66,18 @@ exports.video = async(req,res) => {
         }
         
 
+        //f no video it returns no video uploaded
         if(videoDetails.data.items.length == 0){
-            console.log("No video")
+            console.log("No video uploaded")
             return; 
         }
 
         
         var items = videoDetails.data.items
         
+        ///Loops through every video details and fetches necessry details to be saved
         await Promise.all(
             items.map(async (items,index) =>{
-                //const duration = items[index].contentDetails.duration.split("T");
                 const videoId = items.id.videoId
                 
                 const videoData = {
@@ -93,7 +94,9 @@ exports.video = async(req,res) => {
             })
         );
 
-        //console.log(videoDetails.data)
+            ///if nextPageToken is present, it again hits the api till nextPage token keeps returning
+            ///Next pagetoken onl returns if time interval is 35 mins
+            /// Since a lot of video are there, API Quota is exhausted at once, giving error
         while(videoDetails.data.nextPageToken){
             var token = videoDetails.data.nextPageToken
             console.log(token)
@@ -138,6 +141,7 @@ exports.video = async(req,res) => {
 
         }
 
+        ///Video fetched are added in the database
 
         const videoAdd = await videoModel.insertMany(video);
         if(videoAdd){
@@ -267,6 +271,8 @@ exports.playlist = async(req,res) => {
 
 exports.getAllVideo = async(req,res) => {
     try {
+
+        //Video are fetched in desc order of pubishing
         const videoData = await videoModel.find().sort({"videoPublishedAt": -1})
 
         if(videoData){
@@ -310,8 +316,8 @@ exports.getVideo = async(req,res) => {
     try {
         const title = req.body.title;
         const description = req.body.description;
-        console.log(description);
 
+        //Based on title or descrition, videos are returned
         const video = await videoModel.find({$or:[{ videoTitle: title}, { videoDescription: description}]})
 
 

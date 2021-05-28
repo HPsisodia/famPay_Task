@@ -13,7 +13,7 @@ the video function can also be run by hitting the api "http://localhost:3000/api
 
 to GET all video in descending order, hit the api "http://localhost:3000/api/getallvideo"
 
-to get the video based on title and/or description, hit the api "http://localhost:3000/api/getvideo" and specify the "title" and "description" in the request body
+to GET the video based on title and/or description, hit the api "http://localhost:3000/api/getvideo" and specify the "title" and "description" in the request body
 
 
 BONUS
