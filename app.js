@@ -25,7 +25,7 @@ const limiter = rateLimit({
 
 
 
-var task = cron.schedule('* * * * *', (req,res) => {
+var task = cron.schedule('*/2 * * * *', (req,res) => {
     video(req,res);
 });
 ///////Importing routes
